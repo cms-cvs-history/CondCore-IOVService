@@ -1,5 +1,5 @@
 #include "IOVIteratorImpl.h"
-#include "CondCore/IOVService/interface/IOV.h"
+#include "IOV.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "CondCore/DBCommon/interface/DBWriter.h"
 #include <map>
