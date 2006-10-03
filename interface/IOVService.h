@@ -6,12 +6,12 @@ namespace cond{
   class IOVIterator;
   class IOVService{
   public:
-    explicit IOVService( DBSession* session );
+    explicit IOVService( DBSession& session );
     virtual ~IOVService();
     IOVIterator* newIOVIterator( const std::string& token );
     void deleteAllIndices();
   private:
-    DBSession* m_session;
+    cond::DBSession& m_session;
   } ;
 }//ns cond
 #endif

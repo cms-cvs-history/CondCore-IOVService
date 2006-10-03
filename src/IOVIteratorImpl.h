@@ -2,14 +2,13 @@
 #define CondCore_IOVService_IOVIteratorImpl_h
 #include <string>
 #include "CondCore/IOVService/interface/IOVIterator.h"
-#include "DataSvc/Ref.h"
+//#include "CondCore/DBCommon/interface/Ref.h"
 namespace cond{
   class DBSession;
-  class DBWriter;
   class IOV;
   class IOVIteratorImpl : virtual public cond::IOVIterator{
   public:
-    IOVIteratorImpl( DBSession* sessionHandle,
+    IOVIteratorImpl( DBSession& sessionHandle,
 		     const std::string token );
     virtual ~IOVIteratorImpl();
     virtual void open( bool isReadOnly=true );
@@ -23,11 +22,9 @@ namespace cond{
 			 unsigned long long tillTime );
     virtual void deleteEntries();
   private:
-    //cond::DBSession* m_session;
-    cond::DBWriter* m_writer;
     bool m_isActive;
     bool m_isReadOnly;
-    pool::Ref<cond::IOV> m_iov;
+    cond::IOV* m_iov;
     size_t m_currentPos;
   };
 }//ns cond

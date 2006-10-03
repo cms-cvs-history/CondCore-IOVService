@@ -1,12 +1,12 @@
 #include "IOVIteratorImpl.h"
 #include "IOV.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
-#include "CondCore/DBCommon/interface/DBWriter.h"
+#include "CondCore/DBCommon/interface/Ref.h"
 #include <map>
 #include <algorithm>
-cond::IOVIteratorImpl::IOVIteratorImpl( cond::DBSession* sessionHandle,
+cond::IOVIteratorImpl::IOVIteratorImpl( cond::DBSession& session,
 					const std::string token)
-  : IOVIterator(sessionHandle,token){  
+  : IOVIterator(session,token){  
 } 
 cond::IOVIteratorImpl::~IOVIteratorImpl(){
 }
@@ -14,17 +14,18 @@ void cond::IOVIteratorImpl::open( bool isReadOnly ){
   m_isReadOnly = isReadOnly;
   if(!m_isActive) {
     if( m_isReadOnly ){
-      m_session->startReadOnlyTransaction();
+      m_session.startReadOnlyTransaction();
     }else{
-      m_session->startUpdateTransaction();
+      m_session.startUpdateTransaction();
     }
   }
-  m_iov=pool::Ref<cond::IOV>(&(m_session->DataSvc()), m_token);
+  cond::Ref<cond::IOV> myref(m_session, m_token);
+  m_iov=myref.ptr();
 }
 void cond::IOVIteratorImpl::close(){
   m_iov->iov.clear();
   if(m_isActive){
-    m_session->commit();
+    m_session.commit();
   }
   m_isActive=false;
 }

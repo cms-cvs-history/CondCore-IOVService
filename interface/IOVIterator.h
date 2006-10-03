@@ -1,12 +1,13 @@
 #ifndef CondCore_IOVService_IOVIterator_h
 #define CondCore_IOVService_IOVIterator_h
 #include <string>
+#include "CondCore/DBCommon/interface/Ref.h"
 namespace cond{
   class DBSession;
   class IOVIterator{
   public:
-    IOVIterator(cond::DBSession* sessionHandle,
-		  const std::string token):m_session(sessionHandle),m_token(token){}
+    IOVIterator(cond::DBSession& session,
+		  const std::string token):m_session(session),m_token(token){}
     virtual ~IOVIterator(){}
     virtual void open( bool isReadOnly=true )=0;
     virtual void close()=0;
@@ -19,7 +20,7 @@ namespace cond{
 			 unsigned long long tillTime )=0;
     virtual void deleteEntries()=0 ;
   protected:
-    cond::DBSession* m_session;
+    cond::DBSession& m_session;
     std::string m_token;
   } ;
 }//ns cond

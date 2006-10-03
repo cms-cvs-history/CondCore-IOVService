@@ -1,7 +1,7 @@
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "IOVIteratorImpl.h"
-cond::IOVService::IOVService( DBSession* session ): m_session(session){
+cond::IOVService::IOVService( DBSession& session ): m_session(session){
 }
 cond::IOVService::~IOVService(){
 }
