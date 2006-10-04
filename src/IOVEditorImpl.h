@@ -17,6 +17,7 @@ namespace cond{
     virtual void deleteEntries();
     virtual void flush();
   private:
+    void init();
     DBSession& m_session;
     IOV* m_iov;
     size_t m_counter;

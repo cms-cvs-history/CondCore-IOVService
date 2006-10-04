@@ -11,6 +11,9 @@ namespace cond{
 			 unsigned long long tillTime ) = 0;
     virtual void updateClosure( unsigned long long newtillTime ) = 0;
     virtual void deleteEntries() = 0;
+    std::string token() const {
+      return m_token;
+    }
   protected:
     std::string m_token;
     size_t m_cominterval;

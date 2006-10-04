@@ -1,8 +1,11 @@
 #ifndef CondCore_IOVService_IOVNames_h
 #define CondCore_IOVService_IOVNames_h
 namespace cond{
-  static std::string container() const{
-    return std::string("cond::IOV"); 
-  }
-}
+  class IOVNames{
+  public:
+    static std::string container() {
+      return std::string("cond::IOV"); 
+    }
+  };
+}//ns pool
 #endif

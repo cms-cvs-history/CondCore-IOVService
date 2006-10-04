@@ -13,6 +13,9 @@ cond::IOVEditor* cond::IOVService::newIOVEditor( const std::string& token,
 						 size_t cominterval ){
   return new cond::IOVEditorImpl( m_session, token, cominterval );
 }
+cond::IOVEditor* cond::IOVService::newIOVEditor( size_t cominterval ){
+  return new cond::IOVEditorImpl( m_session, "", cominterval );
+}
 void cond::IOVService::deleteAll(){
   //use implicit collection to delete all in cond::IOV container
 }
