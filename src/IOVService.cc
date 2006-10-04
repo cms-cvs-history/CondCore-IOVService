@@ -1,6 +1,7 @@
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "IOVIteratorImpl.h"
+#include "IOVEditorImpl.h"
 cond::IOVService::IOVService( DBSession& session ): m_session(session){
 }
 cond::IOVService::~IOVService(){
@@ -8,6 +9,10 @@ cond::IOVService::~IOVService(){
 cond::IOVIterator* cond::IOVService::newIOVIterator( const std::string& token ){
   return new cond::IOVIteratorImpl( m_session, token );
 }
-void cond::IOVService::deleteAllIndices(){
+cond::IOVEditor* cond::IOVService::newIOVEditor( const std::string& token,
+						 size_t cominterval ){
+  return new cond::IOVEditorImpl( m_session, token, cominterval );
+}
+void cond::IOVService::deleteAll(){
   //use implicit collection to delete all in cond::IOV container
 }

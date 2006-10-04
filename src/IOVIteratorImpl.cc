@@ -10,14 +10,9 @@ cond::IOVIteratorImpl::IOVIteratorImpl( cond::DBSession& session,
 } 
 cond::IOVIteratorImpl::~IOVIteratorImpl(){
 }
-void cond::IOVIteratorImpl::open( bool isReadOnly ){
-  m_isReadOnly = isReadOnly;
+void cond::IOVIteratorImpl::open(){
   if(!m_isActive) {
-    if( m_isReadOnly ){
-      m_session.startReadOnlyTransaction();
-    }else{
-      m_session.startUpdateTransaction();
-    }
+    m_session.startReadOnlyTransaction();
   }
   cond::Ref<cond::IOV> myref(m_session, m_token);
   m_iov=myref.ptr();
@@ -67,10 +62,4 @@ size_t cond::IOVIteratorImpl::size() const{
 bool cond::IOVIteratorImpl::isValid( unsigned long long time ) const{
   if(  time <= m_iov->iov.rbegin()->first ) return true;
   return false;
-}
-void cond::IOVIteratorImpl::insert( const std::string& payloadToken, 
-				    unsigned long long tillTime ){
-  m_iov->iov.insert(std::make_pair<unsigned long long, std::string>(tillTime, payloadToken));
-}
-void cond::IOVIteratorImpl::deleteEntries(){
 }
