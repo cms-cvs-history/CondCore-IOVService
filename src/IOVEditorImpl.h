@@ -19,7 +19,7 @@ namespace cond{
   private:
     void init();
     DBSession& m_session;
-    IOV* m_iov;
+    cond::Ref<cond::IOV> m_iov;
     size_t m_counter;
   } ;
 }//ns cond

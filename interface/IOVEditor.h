@@ -4,6 +4,7 @@
 namespace cond{
   class IOVEditor{
   public:
+    explicit IOVEditor( size_t cominterval=1 ):m_token(""),m_cominterval(cominterval){}
     explicit IOVEditor( const std::string& token, size_t cominterval=1 ):m_token(token), m_cominterval(cominterval){
     }
     virtual ~IOVEditor(){}
