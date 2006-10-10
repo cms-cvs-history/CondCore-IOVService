@@ -12,7 +12,7 @@ namespace cond{
     virtual ~IOVIteratorImpl();
     virtual void open();
     virtual void close();
-    virtual bool gotoNext();
+    virtual bool next();
     virtual std::string payloadToken() const;
     virtual std::pair<unsigned long long, unsigned long long> validity() const;
     virtual size_t size() const;

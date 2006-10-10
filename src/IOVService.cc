@@ -20,7 +20,6 @@ cond::IOVEditor* cond::IOVService::newIOVEditor( size_t cominterval ){
   return new cond::IOVEditorImpl( m_session, "", cominterval );
 }
 void cond::IOVService::deleteAll(){
-  //use implicit collection to delete all in cond::IOV container
   m_session.startUpdateTransaction();
   cond::ContainerIterator<cond::IOV> it(m_session,cond::IOVNames::container());
   while ( it.next() ) {

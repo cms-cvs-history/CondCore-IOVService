@@ -24,7 +24,7 @@ void cond::IOVIteratorImpl::close(){
   }
   m_isActive=false;
 }
-bool cond::IOVIteratorImpl::gotoNext(){
+bool cond::IOVIteratorImpl::next(){
   if(m_currentPos>m_iov->iov.size()){
     return false;
   }
