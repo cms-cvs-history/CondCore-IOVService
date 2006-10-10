@@ -1,7 +1,10 @@
 #include "CondCore/IOVService/interface/IOVService.h"
+#include "CondCore/IOVService/interface/IOVNames.h"
 #include "CondCore/DBCommon/interface/DBSession.h"
+#include "CondCore/DBCommon/interface/ContainerIterator.h"
 #include "IOVIteratorImpl.h"
 #include "IOVEditorImpl.h"
+#include "IOV.h"
 cond::IOVService::IOVService( DBSession& session ): m_session(session){
 }
 cond::IOVService::~IOVService(){
@@ -18,4 +21,10 @@ cond::IOVEditor* cond::IOVService::newIOVEditor( size_t cominterval ){
 }
 void cond::IOVService::deleteAll(){
   //use implicit collection to delete all in cond::IOV container
+  m_session.startUpdateTransaction();
+  cond::ContainerIterator<cond::IOV> it(m_session,cond::IOVNames::container());
+  while ( it.next() ) {
+    it.dataRef().markDelete();
+  }
+  m_session.commit();
 }
