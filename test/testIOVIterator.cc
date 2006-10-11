@@ -3,6 +3,7 @@
 #include "CondCore/DBCommon/interface/ServiceLoader.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
+#include "CondCore/IOVService/interface/IOVIterator.h"
 #include "CondCore/DBCommon/interface/ConnectMode.h"
 #include "CondCore/DBCommon/interface/Ref.h"
 #include "CondCore/IOVService/src/IOV.h"
@@ -15,16 +16,26 @@ int main(){
     session.connect(cond::ReadWriteCreate);
     cond::IOVService iovmanager(session);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
+    session.startUpdateTransaction();
     editor->insert("pay1tok",20);
     editor->insert("pay2tok",40);
     editor->insert("pay3tok",60);
-    editor->updateClosure(50);
-    std::string token=editor->token();
-    cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
-    bomber->deleteEntries();
+    session.commit();
+    std::string iovtok=editor->token();
+    ///test iterator
+    cond::IOVIterator* it=iovmanager.newIOVIterator(iovtok);
+    std::cout<<"test iterator "<<std::endl;
+    session.startReadOnlyTransaction();
+    while( it->next() ){
+      std::cout<<"payloadToken "<<it->payloadToken()<<std::endl;
+      std::cout<<"since "<<it->validity().first<<std::endl;
+      std::cout<<"till "<<it->validity().second<<std::endl;
+    }
+    std::cout<<"is 30 valid? "<<it->isValid(30)<<std::endl;
+    session.commit();
     session.disconnect();
     delete editor;
-    delete bomber;
+    delete it;
     delete loader;
   }catch(const cond::Exception& er){
     std::cout<<"error "<<er.what()<<std::endl;

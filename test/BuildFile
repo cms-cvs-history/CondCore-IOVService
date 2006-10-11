@@ -1,3 +1,4 @@
 <use name=CondCore/DBCommon>
 <use name=CondCore/IOVService>
 <bin file=testIOVEditor.cc name=testIOVEditor></bin>
+<bin file=testIOVIterator.cc name=testIOVIterator></bin>
