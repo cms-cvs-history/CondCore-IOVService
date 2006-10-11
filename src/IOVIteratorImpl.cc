@@ -6,33 +6,34 @@
 #include <algorithm>
 cond::IOVIteratorImpl::IOVIteratorImpl( cond::DBSession& session,
 					const std::string token)
-  : IOVIterator(session,token){  
+  : IOVIterator(session,token), m_currentPos(0), m_stop(0), m_isOpen(false){
 } 
 cond::IOVIteratorImpl::~IOVIteratorImpl(){
 }
-void cond::IOVIteratorImpl::open(){
-  if(!m_isActive) {
-    m_session.startReadOnlyTransaction();
+void cond::IOVIteratorImpl::refresh(){
+  if(!m_isOpen){
+    m_iov=cond::Ref<cond::IOV>(m_session, m_token);
+    m_isOpen=true;
   }
-  cond::Ref<cond::IOV> myref(m_session, m_token);
-  m_iov=myref.ptr();
-}
-void cond::IOVIteratorImpl::close(){
-  m_iov->iov.clear();
-  if(m_isActive){
-    m_session.commit();
-  }
-  m_isActive=false;
+  m_iov.reset();
+  m_currentPos=0;
+  m_stop=(m_iov->iov.size())-1;
 }
 bool cond::IOVIteratorImpl::next(){
-  if(m_currentPos>m_iov->iov.size()){
+  if(!m_isOpen){
+    m_iov=cond::Ref<cond::IOV>(m_session, m_token);
+    m_stop=(m_iov->iov.size())-1;
+    m_isOpen=true;
+  }
+  std::cout<<"stop pos "<<m_stop<<std::endl;
+  if(m_currentPos>m_stop){
     return false;
   }
   ++m_currentPos;
   return true;
 }
 std::string cond::IOVIteratorImpl::payloadToken() const{
-  size_t pos=0;
+  size_t pos=1;
   for( std::map<unsigned long long, std::string>::const_iterator it=m_iov->iov.begin(); it!=m_iov->iov.end(); ++it,++pos ){
     if(m_currentPos==pos){
       return it->second;
@@ -41,7 +42,7 @@ std::string cond::IOVIteratorImpl::payloadToken() const{
   return "";
 }
 std::pair<unsigned long long, unsigned long long> cond::IOVIteratorImpl::validity() const{
-  size_t pos=0;
+  size_t pos=1;
   unsigned long long since=0;
   unsigned long long till=0;
   std::map<unsigned long long, std::string>::iterator itbeg=m_iov->iov.begin();
@@ -49,15 +50,14 @@ std::pair<unsigned long long, unsigned long long> cond::IOVIteratorImpl::validit
       it!=m_iov->iov.end();++it,++pos){
     if(pos==m_currentPos){
       till=it->first;
-      --it;
-      since=it->first;
-      ++it;
+      if(m_currentPos != 1 ){
+	--it;
+	since=(it->first)+1;
+	++it;
+      }
     }
   }
   return std::make_pair<unsigned long long, unsigned long long>(since,till);
-}
-size_t cond::IOVIteratorImpl::size() const{
-  return m_iov->iov.size();
 }
 bool cond::IOVIteratorImpl::isValid( unsigned long long time ) const{
   if(  time <= m_iov->iov.rbegin()->first ) return true;
