@@ -13,6 +13,8 @@ namespace cond{
     virtual void insert( const std::string& payloadToken, 
 			 unsigned long long tillTime );
     virtual void updateClosure( unsigned long long newtillTime );
+    virtual void append( const std::string& payloadToken, 
+			    unsigned long long sinceTime );
     virtual void deleteEntries();
   private:
     void init();

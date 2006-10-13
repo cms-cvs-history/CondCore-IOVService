@@ -11,6 +11,8 @@ namespace cond{
     virtual void insert( const std::string& payloadToken, 
 			 unsigned long long tillTime ) = 0;
     virtual void updateClosure( unsigned long long newtillTime ) = 0;
+    virtual void append( const std::string& payloadToken,
+			 unsigned long long sinceTime ) = 0;
     virtual void deleteEntries() = 0;
     std::string token() const {
       return m_token;
