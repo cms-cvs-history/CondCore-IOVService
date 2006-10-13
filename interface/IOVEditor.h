@@ -4,8 +4,8 @@
 namespace cond{
   class IOVEditor{
   public:
-    explicit IOVEditor( size_t cominterval=1 ):m_token(""),m_cominterval(cominterval){}
-    explicit IOVEditor( const std::string& token, size_t cominterval=1 ):m_token(token), m_cominterval(cominterval){
+    IOVEditor():m_token(""){}
+    explicit IOVEditor( const std::string& token ):m_token(token){
     }
     virtual ~IOVEditor(){}
     virtual void insert( const std::string& payloadToken, 
@@ -17,7 +17,6 @@ namespace cond{
     }
   protected:
     std::string m_token;
-    size_t m_cominterval;
   } ;
 }//ns cond
 #endif

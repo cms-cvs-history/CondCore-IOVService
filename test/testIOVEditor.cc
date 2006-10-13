@@ -15,6 +15,7 @@ int main(){
     session.connect(cond::ReadWriteCreate);
     cond::IOVService iovmanager(session);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
+    session.startUpdateTransaction();
     editor->insert("pay1tok",20);
     editor->insert("pay2tok",40);
     editor->insert("pay3tok",60);
@@ -22,6 +23,7 @@ int main(){
     std::string token=editor->token();
     cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
     bomber->deleteEntries();
+    session.commit();
     session.disconnect();
     delete editor;
     delete bomber;

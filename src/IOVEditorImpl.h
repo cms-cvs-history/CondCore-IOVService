@@ -8,19 +8,17 @@ namespace cond{
   class IOVEditorImpl : virtual public IOVEditor{
   public:
     IOVEditorImpl( DBSession& session,
-		   const std::string& token, 
-		   size_t cominterval=1 );
+		   const std::string& token);
     virtual ~IOVEditorImpl();
     virtual void insert( const std::string& payloadToken, 
 			 unsigned long long tillTime );
     virtual void updateClosure( unsigned long long newtillTime );
     virtual void deleteEntries();
-    virtual void flush();
   private:
     void init();
     DBSession& m_session;
     cond::Ref<cond::IOV> m_iov;
-    size_t m_counter;
+    bool m_isActive;
   } ;
 }//ns cond
 #endif

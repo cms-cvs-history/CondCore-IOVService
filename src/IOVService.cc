@@ -12,18 +12,15 @@ cond::IOVService::~IOVService(){
 cond::IOVIterator* cond::IOVService::newIOVIterator( const std::string& token ){
   return new cond::IOVIteratorImpl( m_session, token );
 }
-cond::IOVEditor* cond::IOVService::newIOVEditor( const std::string& token,
-						 size_t cominterval ){
-  return new cond::IOVEditorImpl( m_session, token, cominterval );
+cond::IOVEditor* cond::IOVService::newIOVEditor( const std::string& token ){
+  return new cond::IOVEditorImpl( m_session, token );
 }
-cond::IOVEditor* cond::IOVService::newIOVEditor( size_t cominterval ){
-  return new cond::IOVEditorImpl( m_session, "", cominterval );
+cond::IOVEditor* cond::IOVService::newIOVEditor( ){
+  return new cond::IOVEditorImpl( m_session, "");
 }
 void cond::IOVService::deleteAll(){
-  m_session.startUpdateTransaction();
   cond::ContainerIterator<cond::IOV> it(m_session,cond::IOVNames::container());
   while ( it.next() ) {
     it.dataRef().markDelete();
   }
-  m_session.commit();
 }
