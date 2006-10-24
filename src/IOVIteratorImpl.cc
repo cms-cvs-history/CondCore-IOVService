@@ -25,7 +25,6 @@ bool cond::IOVIteratorImpl::next(){
     m_stop=(m_iov->iov.size())-1;
     m_isOpen=true;
   }
-  std::cout<<"stop pos "<<m_stop<<std::endl;
   if(m_currentPos>m_stop){
     return false;
   }

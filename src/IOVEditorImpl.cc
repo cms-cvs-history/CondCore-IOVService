@@ -60,21 +60,29 @@ void cond::IOVEditorImpl::updateClosure( unsigned long long newtillTime ){
   }
 }
 void cond::IOVEditorImpl::append( const std::string& payloadToken, unsigned long long sinceTime ){
+  std::cout<<"IOVEditorImpl::append "<<payloadToken<<" "<<sinceTime<<std::endl;
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::appendIOV cannot append to non-existing IOV index");
-  try{
-    if(!m_isActive) this->init();
-    unsigned long long lastIOV=m_iov->iov.rbegin()->first;
-    std::string lastPayload=m_iov->iov.rbegin()->second;
-    m_iov->iov[lastIOV]=payloadToken;
-    m_iov->iov.insert( std::make_pair((sinceTime+1),lastPayload) );
-    m_iov.markUpdate();
-  }catch( const cond::RefException& er ){
+  //  try{
+  if(!m_isActive) this->init();
+  std::cout<<"inited"<<std::endl;
+  unsigned long long lastIOV=m_iov->iov.rbegin()->first;
+  std::cout<<"lastIOV "<<lastIOV<<std::endl;
+  std::string lastPayload=m_iov->iov.rbegin()->second;
+  std::cout<<"lastPayload "<<lastPayload<<std::endl;
+  m_iov->iov[lastIOV]=payloadToken;
+  std::cout<<"token changed"<<std::endl;
+  m_iov->iov.insert( std::make_pair((sinceTime+1),lastPayload) );
+  std::cout<<"inserted"<<std::endl;
+  m_iov.markUpdate();
+  std::cout<<"marked write"<<std::endl;
+  /*}catch( const cond::RefException& er ){
     std::cout<<er.what()<<std::endl;
-  }catch( const cond::Exception& er ){
+    }catch( const cond::Exception& er ){
     std::cout<<er.what()<<std::endl;
-  }catch( const std::exception& er ){
+    }catch( const std::exception& er ){
     std::cout<<er.what()<<std::endl;
-  }
+    }
+  */
 }
 
 void cond::IOVEditorImpl::deleteEntries(){
