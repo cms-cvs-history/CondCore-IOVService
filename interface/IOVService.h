@@ -16,6 +16,7 @@ namespace cond{
     //user has the ownership of the editor, should explicitly delete
     IOVEditor* newIOVEditor( const std::string& token );
     IOVEditor* newIOVEditor();
+    std::string payloadContainerName( const std::string& token );
     //clean up the entire IOV container
     void deleteAll();
   private:
