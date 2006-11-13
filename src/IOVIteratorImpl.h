@@ -4,11 +4,11 @@
 #include "CondCore/IOVService/interface/IOVIterator.h"
 #include "CondCore/DBCommon/interface/Ref.h"
 namespace cond{
-  class DBSession;
+  class PoolStorageManager;
   class IOV;
   class IOVIteratorImpl : virtual public cond::IOVIterator{
   public:
-    IOVIteratorImpl( DBSession& session,
+    IOVIteratorImpl( PoolStorageManager& pooldb,
 		     const std::string token );
     virtual ~IOVIteratorImpl();
     virtual void refresh();

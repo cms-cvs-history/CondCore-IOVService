@@ -1,18 +1,18 @@
 #include "IOVIteratorImpl.h"
 #include "IOV.h"
-#include "CondCore/DBCommon/interface/DBSession.h"
+#include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/Ref.h"
 #include <map>
 #include <algorithm>
-cond::IOVIteratorImpl::IOVIteratorImpl( cond::DBSession& session,
+cond::IOVIteratorImpl::IOVIteratorImpl( cond::PoolStorageManager& pooldb,
 					const std::string token)
-  : IOVIterator(session,token), m_currentPos(0), m_stop(0), m_isOpen(false){
+  : IOVIterator(pooldb,token), m_currentPos(0), m_stop(0), m_isOpen(false){
 } 
 cond::IOVIteratorImpl::~IOVIteratorImpl(){
 }
 void cond::IOVIteratorImpl::refresh(){
   if(!m_isOpen){
-    m_iov=cond::Ref<cond::IOV>(m_session, m_token);
+    m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token);
     m_isOpen=true;
   }
   m_iov.reset();
@@ -21,7 +21,7 @@ void cond::IOVIteratorImpl::refresh(){
 }
 bool cond::IOVIteratorImpl::next(){
   if(!m_isOpen){
-    m_iov=cond::Ref<cond::IOV>(m_session, m_token);
+    m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token);
     m_stop=(m_iov->iov.size())-1;
     m_isOpen=true;
   }

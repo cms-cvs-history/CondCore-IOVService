@@ -3,11 +3,11 @@
 #include <string>
 #include "CondCore/DBCommon/interface/Ref.h"
 namespace cond{
-  class DBSession;
+  class PoolStorageManager;
   class IOVIterator{
   public:
-    IOVIterator(cond::DBSession& session,
-		  const std::string token):m_session(session),m_token(token){}
+    IOVIterator(cond::PoolStorageManager& pooldb,
+		const std::string token):m_pooldb(pooldb),m_token(token){}
     virtual ~IOVIterator(){}
     virtual void refresh()=0;
     virtual bool next()=0;
@@ -15,7 +15,7 @@ namespace cond{
     virtual std::pair<unsigned long long, unsigned long long> validity() const=0;
     virtual bool isValid( unsigned long long time ) const=0;
   protected:
-    cond::DBSession& m_session;
+    cond::PoolStorageManager& m_pooldb;
     std::string m_token;
   } ;
 }//ns cond

@@ -4,10 +4,10 @@
 #include "CondCore/IOVService/interface/IOVEditor.h"
 namespace cond{
   class IOV;
-  class DBSession;
+  class PoolStorageManager;
   class IOVEditorImpl : virtual public IOVEditor{
   public:
-    IOVEditorImpl( DBSession& session,
+    IOVEditorImpl( PoolStorageManager& pooldb,
 		   const std::string& token);
     virtual ~IOVEditorImpl();
     virtual void insert( const std::string& payloadToken, 
@@ -18,7 +18,7 @@ namespace cond{
     virtual void deleteEntries();
   private:
     void init();
-    DBSession& m_session;
+    PoolStorageManager& m_pooldb;
     cond::Ref<cond::IOV> m_iov;
     bool m_isActive;
   } ;

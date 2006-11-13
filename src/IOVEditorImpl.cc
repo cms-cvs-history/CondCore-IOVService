@@ -1,17 +1,17 @@
-#include "CondCore/DBCommon/interface/DBSession.h"
+#include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/Ref.h"
 #include "CondCore/IOVService/interface/IOVNames.h"
 #include "IOVEditorImpl.h"
 #include "IOV.h"
-cond::IOVEditorImpl::IOVEditorImpl( DBSession& session,
+cond::IOVEditorImpl::IOVEditorImpl( cond::PoolStorageManager& pooldb,
 				    const std::string& token
-				  ):cond::IOVEditor(token),m_session(session),m_isActive(false){
+				  ):cond::IOVEditor(token),m_pooldb(pooldb),m_isActive(false){
 }
 void cond::IOVEditorImpl::init(){
   if(m_isActive) return;
   if(!m_token.empty()){
     try{
-      m_iov=cond::Ref<cond::IOV>(m_session, m_token); 
+      m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token); 
     }catch( const cond::RefException& er ){
       std::cout<<er.what()<<std::endl;
     }
@@ -27,7 +27,7 @@ void cond::IOVEditorImpl::insert( const std::string& payloadToken,
     if(m_token.empty()){
       cond::IOV* myiov=new cond::IOV;
       myiov->iov.insert(std::make_pair<unsigned long long, std::string>(tillTime, payloadToken));
-      m_iov=cond::Ref<cond::IOV>(m_session,myiov);
+      m_iov=cond::Ref<cond::IOV>(m_pooldb,myiov);
       m_iov.markWrite(cond::IOVNames::container());
       m_token=m_iov.token();
     }else{

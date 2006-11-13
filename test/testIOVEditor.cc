@@ -1,6 +1,8 @@
 #include "CondCore/DBCommon/interface/DBSession.h"
+#include "CondCore/DBCommon/interface/SessionConfiguration.h"
+#include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/Exception.h"
-#include "CondCore/DBCommon/interface/ServiceLoader.h"
+#include "CondCore/DBCommon/interface/MessageLevel.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
 #include "CondCore/DBCommon/interface/ConnectMode.h"
@@ -8,26 +10,28 @@
 #include "CondCore/IOVService/src/IOV.h"
 int main(){
   try{
-    cond::ServiceLoader* loader=new cond::ServiceLoader;
-    loader->loadMessageService(cond::Error);
-    cond::DBSession session("sqlite_file:test.db");
-    session.setCatalog("file:mycatalog.xml");
-    session.connect(cond::ReadWriteCreate);
-    cond::IOVService iovmanager(session);
+    cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
+    session->sessionConfiguration().setMessageLevel(cond::Error);
+    session->open(true);
+    cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
+    pooldb.connect(cond::ReadWriteCreate);
+    cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
-    session.startUpdateTransaction();
+    pooldb.startTransaction(false);
     editor->insert("pay1tok",20);
     editor->insert("pay2tok",40);
     editor->insert("pay3tok",60);
-    editor->updateClosure(50);
+    //editor->updateClosure(50);
     std::string token=editor->token();
+    std::cout<<"iov token "<<token<<std::endl;
     cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
     bomber->deleteEntries();
-    session.commit();
-    session.disconnect();
+    pooldb.commit();
+    pooldb.disconnect();
+    session->close();
     delete editor;
     delete bomber;
-    delete loader;
+    delete session;
   }catch(const cond::Exception& er){
     std::cout<<"error "<<er.what()<<std::endl;
   }catch(const std::exception& er){

@@ -2,12 +2,12 @@
 #define CondCore_IOVService_IOVService_h
 #include <string>
 namespace cond{
-  class DBSession;
+  class PoolStorageManager;
   class IOVIterator;
   class IOVEditor;
   class IOVService{
   public:
-    explicit IOVService( DBSession& session );
+    explicit IOVService( cond::PoolStorageManager& pooldb );
     virtual ~IOVService();
     //iterator interface
     //user has the ownership of the iterator, should explicitly delete
@@ -20,7 +20,7 @@ namespace cond{
     //clean up the entire IOV container
     void deleteAll();
   private:
-    cond::DBSession& m_session;
+    cond::PoolStorageManager& m_pooldb;
   } ;
 }//ns cond
 #endif
