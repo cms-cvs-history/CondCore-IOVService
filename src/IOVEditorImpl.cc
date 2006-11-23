@@ -21,17 +21,17 @@ void cond::IOVEditorImpl::init(){
 cond::IOVEditorImpl::~IOVEditorImpl(){
 }
 void cond::IOVEditorImpl::insert( const std::string& payloadToken, 
-				  unsigned long long tillTime ){
+				  cond::Time_t tillTime ){
   try{
     if(!m_isActive) this->init();
     if(m_token.empty()){
       cond::IOV* myiov=new cond::IOV;
-      myiov->iov.insert(std::make_pair<unsigned long long, std::string>(tillTime, payloadToken));
+      myiov->iov.insert(std::make_pair<cond::Time_t, std::string>(tillTime, payloadToken));
       m_iov=cond::Ref<cond::IOV>(m_pooldb,myiov);
       m_iov.markWrite(cond::IOVNames::container());
       m_token=m_iov.token();
     }else{
-      m_iov->iov.insert(std::make_pair<unsigned long long, std::string>(tillTime, payloadToken));
+      m_iov->iov.insert(std::make_pair<cond::Time_t, std::string>(tillTime, payloadToken));
        m_iov.markUpdate();
     }
    }catch( const cond::RefException& er ){
@@ -42,11 +42,11 @@ void cond::IOVEditorImpl::insert( const std::string& payloadToken,
     std::cout<<er.what()<<std::endl;
   }
 }
-void cond::IOVEditorImpl::updateClosure( unsigned long long newtillTime ){
+void cond::IOVEditorImpl::updateClosure( cond::Time_t newtillTime ){
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::updateClosure cannot change non-existing IOV index");
   try{
     if(!m_isActive) this->init();
-    unsigned long long closeIOV=m_iov->iov.rbegin()->first;
+    cond::Time_t closeIOV=m_iov->iov.rbegin()->first;
     std::string closePayload=m_iov->iov.rbegin()->second;
     m_iov->iov.insert( std::make_pair(newtillTime,closePayload) );
     m_iov->iov.erase( m_iov->iov.find(closeIOV) );
@@ -59,13 +59,13 @@ void cond::IOVEditorImpl::updateClosure( unsigned long long newtillTime ){
     std::cout<<er.what()<<std::endl;
   }
 }
-void cond::IOVEditorImpl::append( const std::string& payloadToken, unsigned long long sinceTime ){
+void cond::IOVEditorImpl::append( const std::string& payloadToken, cond::Time_t sinceTime ){
   std::cout<<"IOVEditorImpl::append "<<payloadToken<<" "<<sinceTime<<std::endl;
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::appendIOV cannot append to non-existing IOV index");
   //  try{
   if(!m_isActive) this->init();
   std::cout<<"inited"<<std::endl;
-  unsigned long long lastIOV=m_iov->iov.rbegin()->first;
+  cond::Time_t lastIOV=m_iov->iov.rbegin()->first;
   std::cout<<"lastIOV "<<lastIOV<<std::endl;
   std::string lastPayload=m_iov->iov.rbegin()->second;
   std::cout<<"lastPayload "<<lastPayload<<std::endl;

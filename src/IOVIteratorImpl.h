@@ -14,8 +14,8 @@ namespace cond{
     virtual void refresh();
     virtual bool next();
     virtual std::string payloadToken() const;
-    virtual std::pair<unsigned long long, unsigned long long> validity() const;
-    virtual bool isValid( unsigned long long time ) const;
+    virtual std::pair<cond::Time_t, cond::Time_t> validity() const;
+    virtual bool isValid( cond::Time_t time ) const;
   private:
     cond::Ref<cond::IOV> m_iov;
     size_t m_currentPos;

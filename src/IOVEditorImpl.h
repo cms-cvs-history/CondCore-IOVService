@@ -11,10 +11,10 @@ namespace cond{
 		   const std::string& token);
     virtual ~IOVEditorImpl();
     virtual void insert( const std::string& payloadToken, 
-			 unsigned long long tillTime );
-    virtual void updateClosure( unsigned long long newtillTime );
+			 cond::Time_t tillTime );
+    virtual void updateClosure( cond::Time_t newtillTime );
     virtual void append( const std::string& payloadToken, 
-			    unsigned long long sinceTime );
+			    cond::Time_t sinceTime );
     virtual void deleteEntries();
   private:
     void init();

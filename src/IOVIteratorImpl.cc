@@ -33,19 +33,19 @@ bool cond::IOVIteratorImpl::next(){
 }
 std::string cond::IOVIteratorImpl::payloadToken() const{
   size_t pos=1;
-  for( std::map<unsigned long long, std::string>::const_iterator it=m_iov->iov.begin(); it!=m_iov->iov.end(); ++it,++pos ){
+  for( std::map<cond::Time_t, std::string>::const_iterator it=m_iov->iov.begin(); it!=m_iov->iov.end(); ++it,++pos ){
     if(m_currentPos==pos){
       return it->second;
     }
   }
   return "";
 }
-std::pair<unsigned long long, unsigned long long> cond::IOVIteratorImpl::validity() const{
+std::pair<cond::Time_t, cond::Time_t> cond::IOVIteratorImpl::validity() const{
   size_t pos=1;
-  unsigned long long since=0;
-  unsigned long long till=0;
-  std::map<unsigned long long, std::string>::iterator itbeg=m_iov->iov.begin();
-  for(std::map<unsigned long long, std::string>::iterator it=itbeg;
+  cond::Time_t since=0;
+  cond::Time_t till=0;
+  std::map<cond::Time_t, std::string>::iterator itbeg=m_iov->iov.begin();
+  for(std::map<cond::Time_t, std::string>::iterator it=itbeg;
       it!=m_iov->iov.end();++it,++pos){
     if(pos==m_currentPos){
       till=it->first;
@@ -56,9 +56,9 @@ std::pair<unsigned long long, unsigned long long> cond::IOVIteratorImpl::validit
       }
     }
   }
-  return std::make_pair<unsigned long long, unsigned long long>(since,till);
+  return std::make_pair<cond::Time_t, cond::Time_t>(since,till);
 }
-bool cond::IOVIteratorImpl::isValid( unsigned long long time ) const{
+bool cond::IOVIteratorImpl::isValid( cond::Time_t time ) const{
   if(  time <= m_iov->iov.rbegin()->first ) return true;
   return false;
 }
