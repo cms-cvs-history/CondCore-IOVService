@@ -6,5 +6,4 @@
 <bin file=testIOVEditor.cc name=testIOVEditor></bin>
 <bin file=testIOVIterator.cc name=testIOVIterator></bin>
 <bin file=testqueryPContainer.cc name=testqueryPContainer>
-  <lib name=testPayloadDict>	
 </bin>
