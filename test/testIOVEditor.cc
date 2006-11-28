@@ -7,7 +7,6 @@
 #include "CondCore/IOVService/interface/IOVEditor.h"
 #include "CondCore/DBCommon/interface/ConnectMode.h"
 #include "CondCore/DBCommon/interface/Ref.h"
-#include "CondCore/IOVService/src/IOV.h"
 int main(){
   try{
     cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
