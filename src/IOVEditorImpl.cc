@@ -42,6 +42,32 @@ void cond::IOVEditorImpl::insert( const std::string& payloadToken,
     std::cout<<er.what()<<std::endl;
   }
 }
+void cond::IOVEditorImpl::bulkInsert(std::vector< std::pair<cond::Time_t,std::string> >& values){
+  try{
+    if(!m_isActive) this->init();
+    if(m_token.empty()){
+      cond::IOV* myiov=new cond::IOV;
+      for(std::vector< std::pair<cond::Time_t,std::string> >::iterator it=values.begin(); it!=values.end(); ++it){
+	myiov->iov.insert(*it);
+      }
+      m_iov=cond::Ref<cond::IOV>(m_pooldb,myiov);
+      m_iov.markWrite(cond::IOVNames::container());
+      m_token=m_iov.token();
+    }else{
+      for(std::vector< std::pair<cond::Time_t,std::string> >::iterator it=values.begin(); it!=values.end(); ++it){
+	m_iov->iov.insert(*it);
+      }
+      m_iov.markUpdate();
+    }
+  }catch( const cond::RefException& er ){
+    std::cout<<er.what()<<std::endl;
+  }catch( const cond::Exception& er ){
+    std::cout<<er.what()<<std::endl;
+  }catch( const std::exception& er ){
+    std::cout<<er.what()<<std::endl;
+  }
+}
+
 void cond::IOVEditorImpl::updateClosure( cond::Time_t newtillTime ){
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::updateClosure cannot change non-existing IOV index");
   try{
@@ -62,7 +88,6 @@ void cond::IOVEditorImpl::updateClosure( cond::Time_t newtillTime ){
 void cond::IOVEditorImpl::append( const std::string& payloadToken, cond::Time_t sinceTime ){
   std::cout<<"IOVEditorImpl::append "<<payloadToken<<" "<<sinceTime<<std::endl;
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::appendIOV cannot append to non-existing IOV index");
-  //  try{
   if(!m_isActive) this->init();
   std::cout<<"inited"<<std::endl;
   cond::Time_t lastIOV=m_iov->iov.rbegin()->first;
@@ -75,16 +100,24 @@ void cond::IOVEditorImpl::append( const std::string& payloadToken, cond::Time_t 
   std::cout<<"inserted"<<std::endl;
   m_iov.markUpdate();
   std::cout<<"marked write"<<std::endl;
-  /*}catch( const cond::RefException& er ){
-    std::cout<<er.what()<<std::endl;
-    }catch( const cond::Exception& er ){
-    std::cout<<er.what()<<std::endl;
-    }catch( const std::exception& er ){
-    std::cout<<er.what()<<std::endl;
-    }
+}
+void cond::IOVEditorImpl::bulkAppend( std::vector< std::pair<cond::Time_t,std::string> >& values ){
+  if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::bulkAppend cannot append to non-existing IOV index");
+  if(!m_isActive) this->init();
+  /*to be continued
+  std::cout<<"inited"<<std::endl;
+  cond::Time_t lastIOV=m_iov->iov.rbegin()->first;
+  std::cout<<"lastIOV "<<lastIOV<<std::endl;
+  std::string lastPayload=m_iov->iov.rbegin()->second;
+  std::cout<<"lastPayload "<<lastPayload<<std::endl;
+  m_iov->iov[lastIOV]=payloadToken;
+  std::cout<<"token changed"<<std::endl;
+  m_iov->iov.insert( std::make_pair((sinceTime+1),lastPayload) );
+  std::cout<<"inserted"<<std::endl;
+  m_iov.markUpdate();
+  std::cout<<"marked write"<<std::endl;
   */
 }
-
 void cond::IOVEditorImpl::deleteEntries(){
   if( m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::deleteEntries cannot delete to non-existing IOV index");
   try{
@@ -97,4 +130,11 @@ void cond::IOVEditorImpl::deleteEntries(){
   }catch( const std::exception& er ){
     std::cout<<er.what()<<std::endl;
   }
+}
+void cond::IOVEditorImpl::import( const std::string& sourceIOVtoken ){
+  if( !m_token.empty() ) throw cond::Exception("cond::IOVEditorImpl::import IOV index already exists, cannot import");
+  if(!m_isActive) this->init();
+  m_iov=cond::Ref<cond::IOV>(m_pooldb,sourceIOVtoken);
+  m_iov.markWrite(cond::IOVNames::container());
+  m_token=m_iov.token();
 }

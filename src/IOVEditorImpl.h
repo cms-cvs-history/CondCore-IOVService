@@ -12,10 +12,13 @@ namespace cond{
     virtual ~IOVEditorImpl();
     virtual void insert( const std::string& payloadToken, 
 			 cond::Time_t tillTime );
+    virtual void bulkInsert( std::vector< std::pair<cond::Time_t,std::string> >& values );
     virtual void updateClosure( cond::Time_t newtillTime );
     virtual void append( const std::string& payloadToken, 
 			    cond::Time_t sinceTime );
+    virtual void bulkAppend( std::vector< std::pair<cond::Time_t,std::string> >& values );
     virtual void deleteEntries();
+    virtual void import( const std::string& sourceIOVtoken ); 
   private:
     void init();
     PoolStorageManager& m_pooldb;
