@@ -19,9 +19,9 @@ int main(){
     cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
     pooldb.startTransaction(false);
-    editor->insert("pay1tok",20);
-    editor->insert("pay2tok",40);
-    editor->insert("pay3tok",60);
+    editor->insert(20,"pay1tok");
+    editor->insert(40,"pay2tok");
+    editor->insert(60,"pay3tok");
     pooldb.commit();
     std::string iovtok=editor->token();
     ///test iterator

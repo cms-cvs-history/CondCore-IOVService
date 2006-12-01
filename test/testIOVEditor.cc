@@ -17,10 +17,12 @@ int main(){
     cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
     pooldb.startTransaction(false);
-    editor->insert("pay1tok",20);
-    editor->insert("pay2tok",40);
-    editor->insert("pay3tok",60);
-    //editor->updateClosure(50);
+    editor->insert(20,"pay1tok");
+    editor->insert(40, "pay2tok");
+    editor->insert(60, "pay3tok");
+    editor->insert(999999, "pay4tok");
+    editor->append(70, "pay5tok");
+    editor->updateClosure(999997);
     std::string token=editor->token();
     std::cout<<"iov token "<<token<<std::endl;
     cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
