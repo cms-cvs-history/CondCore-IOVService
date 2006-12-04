@@ -15,7 +15,7 @@ int main(){
     session->sessionConfiguration().setMessageLevel(cond::Error);
     session->open(true);
     cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
-    pooldb.connect(cond::ReadWriteCreate);
+    pooldb.connect();
     testPayloadObj* myobj=new testPayloadObj;
     myobj->data.push_back(1);
     myobj->data.push_back(10);

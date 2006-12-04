@@ -13,7 +13,7 @@ int main(){
     session->sessionConfiguration().setMessageLevel(cond::Error);
     session->open(true);
     cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
-    pooldb.connect(cond::ReadWriteCreate);
+    pooldb.connect();
     cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
     pooldb.startTransaction(false);
