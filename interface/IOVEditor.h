@@ -7,9 +7,6 @@
 namespace cond{
   class IOVEditor{
   public:
-    IOVEditor():m_token(""){}
-    explicit IOVEditor( const std::string& token ):m_token(token){
-    }
     virtual ~IOVEditor(){}
     virtual void insert( cond::Time_t tillTime,
 			 const std::string& payloadToken
@@ -21,11 +18,9 @@ namespace cond{
 			  ) = 0;
     virtual void deleteEntries() = 0;
     virtual void import( const std::string& sourceIOVtoken ) = 0;
-    std::string token() const {
-      return m_token;
-    }
+    virtual std::string token() const = 0;
   protected:
-    std::string m_token;
+    IOVEditor(){}
   };
 }//ns cond
 #endif

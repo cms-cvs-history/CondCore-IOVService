@@ -1,22 +1,20 @@
 #include "CondCore/DBCommon/interface/DBSession.h"
 #include "CondCore/DBCommon/interface/Exception.h"
-#include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/SessionConfiguration.h"
+#include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/MessageLevel.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
 #include "CondCore/IOVService/interface/IOVIterator.h"
-#include "CondCore/DBCommon/interface/ConnectMode.h"
-#include "CondCore/DBCommon/interface/Ref.h"
-#include "CondCore/IOVService/src/IOV.h"
+#include <iostream>
 int main(){
   try{
     cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
     session->sessionConfiguration().setMessageLevel(cond::Error);
     session->open(true);
     cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
-    pooldb.connect();
     cond::IOVService iovmanager(pooldb);
+    pooldb.connect();
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
     pooldb.startTransaction(false);
     editor->insert(20,"pay1tok");
@@ -33,7 +31,7 @@ int main(){
       std::cout<<"since "<<it->validity().first<<std::endl;
       std::cout<<"till "<<it->validity().second<<std::endl;
     }
-    std::cout<<"is 30 valid? "<<it->isValid(30)<<std::endl;
+    std::cout<<"is 30 valid? "<<iovmanager.isValid(iovtok,30)<<std::endl;
     pooldb.commit();
     pooldb.disconnect();
     session->close();

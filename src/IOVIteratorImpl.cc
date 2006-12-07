@@ -2,28 +2,25 @@
 #include "IOV.h"
 #include "CondCore/DBCommon/interface/PoolStorageManager.h"
 #include "CondCore/DBCommon/interface/Ref.h"
+//#include "CondCore/DBCommon/interface/Time.h"
 #include <map>
 #include <algorithm>
 cond::IOVIteratorImpl::IOVIteratorImpl( cond::PoolStorageManager& pooldb,
 					const std::string token)
-  : IOVIterator(pooldb,token), m_currentPos(0), m_stop(0), m_isOpen(false){
+  : m_pooldb(pooldb),m_token(token), m_currentPos(0), m_stop(0), m_isOpen(false){
 } 
 cond::IOVIteratorImpl::~IOVIteratorImpl(){
 }
-void cond::IOVIteratorImpl::refresh(){
-  if(!m_isOpen){
-    m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token);
-    m_isOpen=true;
-  }
-  m_iov.reset();
-  m_currentPos=0;
+void cond::IOVIteratorImpl::init(){
+  //m_pooldb.startTransaction(cond::ReadOnly);
+  m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token);
   m_stop=(m_iov->iov.size())-1;
+  m_isOpen=true;
+  //m_pooldb.commit();
 }
 bool cond::IOVIteratorImpl::next(){
   if(!m_isOpen){
-    m_iov=cond::Ref<cond::IOV>(m_pooldb, m_token);
-    m_stop=(m_iov->iov.size())-1;
-    m_isOpen=true;
+    init();
   }
   if(m_currentPos>m_stop){
     return false;
@@ -31,7 +28,11 @@ bool cond::IOVIteratorImpl::next(){
   ++m_currentPos;
   return true;
 }
-std::string cond::IOVIteratorImpl::payloadToken() const{
+std::string 
+cond::IOVIteratorImpl::payloadToken() const{
+  if(!m_isOpen){
+    const_cast<cond::IOVIteratorImpl*>(this)->init();
+  }
   size_t pos=1;
   for( std::map<cond::Time_t, std::string>::const_iterator it=m_iov->iov.begin(); it!=m_iov->iov.end(); ++it,++pos ){
     if(m_currentPos==pos){
@@ -40,7 +41,11 @@ std::string cond::IOVIteratorImpl::payloadToken() const{
   }
   return "";
 }
-std::pair<cond::Time_t, cond::Time_t> cond::IOVIteratorImpl::validity() const{
+std::pair<cond::Time_t, cond::Time_t> 
+cond::IOVIteratorImpl::validity() const{
+  if(!m_isOpen){
+    const_cast<cond::IOVIteratorImpl*>(this)->init();
+  }
   size_t pos=1;
   cond::Time_t since=0;
   cond::Time_t till=0;
@@ -57,8 +62,4 @@ std::pair<cond::Time_t, cond::Time_t> cond::IOVIteratorImpl::validity() const{
     }
   }
   return std::make_pair<cond::Time_t, cond::Time_t>(since,till);
-}
-bool cond::IOVIteratorImpl::isValid( cond::Time_t time ) const{
-  if(  time <= m_iov->iov.rbegin()->first ) return true;
-  return false;
 }

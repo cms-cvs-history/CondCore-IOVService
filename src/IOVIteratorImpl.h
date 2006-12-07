@@ -8,15 +8,16 @@ namespace cond{
   class IOV;
   class IOVIteratorImpl : virtual public cond::IOVIterator{
   public:
-    IOVIteratorImpl( PoolStorageManager& pooldb,
+    IOVIteratorImpl( cond::PoolStorageManager& pooldb,
 		     const std::string token );
     virtual ~IOVIteratorImpl();
-    virtual void refresh();
     virtual bool next();
     virtual std::string payloadToken() const;
     virtual std::pair<cond::Time_t, cond::Time_t> validity() const;
-    virtual bool isValid( cond::Time_t time ) const;
   private:
+    void init();
+    cond::PoolStorageManager& m_pooldb;
+    std::string m_token;
     cond::Ref<cond::IOV> m_iov;
     size_t m_currentPos;
     size_t m_stop;

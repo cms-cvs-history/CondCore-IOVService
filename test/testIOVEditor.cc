@@ -5,8 +5,8 @@
 #include "CondCore/DBCommon/interface/MessageLevel.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
-#include "CondCore/DBCommon/interface/ConnectMode.h"
-#include "CondCore/DBCommon/interface/Ref.h"
+#include <iostream>
+//#include "CondCore/DBCommon/interface/Ref.h"
 int main(){
   try{
     cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
@@ -25,13 +25,13 @@ int main(){
     editor->updateClosure(999997);
     std::string token=editor->token();
     std::cout<<"iov token "<<token<<std::endl;
-    cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
-    bomber->deleteEntries();
+    //cond::IOVEditor* bomber=iovmanager.newIOVEditor(token);
+    //bomber->deleteEntries();
     pooldb.commit();
     pooldb.disconnect();
     session->close();
     delete editor;
-    delete bomber;
+    //delete bomber;
     delete session;
   }catch(const cond::Exception& er){
     std::cout<<"error "<<er.what()<<std::endl;

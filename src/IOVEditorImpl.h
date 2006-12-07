@@ -1,30 +1,34 @@
 #ifndef CondCore_IOVService_IOVEditorImpl_h
 #define CondCore_IOVService_IOVEditorImpl_h
-#include <string>
 #include "CondCore/IOVService/interface/IOVEditor.h"
+#include "CondCore/DBCommon/interface/Ref.h"
 namespace cond{
-  class IOV;
   class PoolStorageManager;
-  class IOVEditorImpl : virtual public IOVEditor{
+  class IOV;
+  class IOVEditorImpl : virtual public cond::IOVEditor{
   public:
-    IOVEditorImpl( PoolStorageManager& pooldb,
-		   const std::string& token);
+    explicit IOVEditorImpl( cond::PoolStorageManager& pooldb,
+			    const std::string& token );
     virtual ~IOVEditorImpl();
-    virtual void insert( cond::Time_t tillTime ,
-			 const std::string& payloadToken
-			 );
-    virtual void bulkInsert( std::vector< std::pair<cond::Time_t,std::string> >& values );
+    void insert( cond::Time_t tillTime,
+		 const std::string& payloadToken
+		 );
+    void bulkInsert( std::vector< std::pair<cond::Time_t,std::string> >& values );
     virtual void updateClosure( cond::Time_t newtillTime );
-    virtual void append( cond::Time_t sinceTime ,
-			 const std::string& payloadToken
-			 );
+    virtual void append(  cond::Time_t sinceTime,
+			  const std::string& payloadToken
+			  );
     virtual void deleteEntries();
-    virtual void import( const std::string& sourceIOVtoken ); 
+    virtual void import( const std::string& sourceIOVtoken );
+    std::string token() const {
+      return m_token;
+    }
   private:
     void init();
-    PoolStorageManager& m_pooldb;
-    cond::Ref<cond::IOV> m_iov;
+    cond::PoolStorageManager& m_pooldb;
+    std::string m_token;
     bool m_isActive;
-  } ;
+    cond::Ref<cond::IOV> m_iov;
+  };
 }//ns cond
 #endif

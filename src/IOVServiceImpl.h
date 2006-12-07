@@ -1,16 +1,14 @@
-#ifndef CondCore_IOVService_IOVService_h
-#define CondCore_IOVService_IOVService_h
+#ifndef CondCore_IOVService_IOVServiceImpl_h
+#define CondCore_IOVService_IOVServiceImpl_h
 #include <string>
-#include "CondCore/DBCommon/interface/Time.h"
 namespace cond{
   class PoolStorageManager;
-  class IOVServiceImpl;
   class IOVIterator;
   class IOVEditor;
-  class IOVService{
+  class IOVServiceImpl{
   public:
-    explicit IOVService( cond::PoolStorageManager& pooldb );
-    virtual ~IOVService();
+    explicit IOVServiceImpl( cond::PoolStorageManager& pooldb );
+    ~IOVServiceImpl();
     std::string payloadToken( const std::string& iovToken,
 			      cond::Time_t currenttime ) const;
     bool isValid( const std::string& iovToken,
@@ -24,7 +22,6 @@ namespace cond{
     IOVEditor* newIOVEditor();
   private:
     cond::PoolStorageManager& m_pooldb;
-    cond::IOVServiceImpl* m_impl;
   };
 }//ns cond
 #endif
