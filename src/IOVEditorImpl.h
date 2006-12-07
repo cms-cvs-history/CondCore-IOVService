@@ -8,7 +8,9 @@ namespace cond{
   class IOVEditorImpl : virtual public cond::IOVEditor{
   public:
     explicit IOVEditorImpl( cond::PoolStorageManager& pooldb,
-			    const std::string& token );
+			    const std::string& token,
+			    cond::Time_t globalSince, 
+			    cond::Time_t globalTill);
     virtual ~IOVEditorImpl();
     void insert( cond::Time_t tillTime,
 		 const std::string& payloadToken
@@ -27,6 +29,8 @@ namespace cond{
     void init();
     cond::PoolStorageManager& m_pooldb;
     std::string m_token;
+    cond::Time_t m_globalSince;
+    cond::Time_t m_globalTill;
     bool m_isActive;
     cond::Ref<cond::IOV> m_iov;
   };

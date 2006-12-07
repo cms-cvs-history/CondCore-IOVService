@@ -3,21 +3,21 @@
 #include "IOVServiceImpl.h"
 #include "IOVIteratorImpl.h"
 #include "IOVEditorImpl.h"
-cond::IOVService::IOVService( cond::PoolStorageManager& pooldb ):
+cond::IOVService::IOVService( cond::PoolStorageManager& pooldb,cond::TimeType timetype ):
   m_pooldb(pooldb),
-  m_impl(new cond::IOVServiceImpl(pooldb)){
+  m_impl(new cond::IOVServiceImpl(pooldb,timetype)){
 }
 cond::IOVService::~IOVService(){
   delete m_impl;
 }
 std::string 
 cond::IOVService::payloadToken( const std::string& iovToken,
-				cond::Time_t currenttime ) const{
+				cond::Time_t currenttime ){
   return m_impl->payloadToken(iovToken, currenttime);
 }
 bool 
 cond::IOVService::isValid( const std::string& iovToken,
-			   cond::Time_t currenttime ) const{
+			   cond::Time_t currenttime ){
   return m_impl->isValid(iovToken,currenttime);
 }
 std::pair<cond::Time_t, cond::Time_t> 
@@ -34,13 +34,25 @@ cond::IOVService::deleteAll(){
 }
 cond::IOVIterator* 
 cond::IOVService::newIOVIterator( const std::string& token ){
-  return new cond::IOVIteratorImpl( m_pooldb,token );
+  return new cond::IOVIteratorImpl( m_pooldb,token,m_impl->globalSince(),m_impl->globalTill());
 }
 cond::IOVEditor* 
 cond::IOVService::newIOVEditor( const std::string& token ){
-  return new cond::IOVEditorImpl( m_pooldb,token );
+  return new cond::IOVEditorImpl( m_pooldb,token,m_impl->globalSince(),m_impl->globalTill());
 }
 cond::IOVEditor* 
 cond::IOVService::newIOVEditor( ){
-  return new cond::IOVEditorImpl( m_pooldb, "");
+  return new cond::IOVEditorImpl( m_pooldb,"",m_impl->globalSince(),m_impl->globalTill());
+}
+cond::TimeType 
+cond::IOVService::timeType() const{
+  return m_impl->timeType();
+}
+cond::Time_t 
+cond::IOVService::globalSince() const{
+  return m_impl->globalSince();
+}
+cond::Time_t 
+cond::IOVService::globalTill() const{
+  return m_impl->globalTill();
 }

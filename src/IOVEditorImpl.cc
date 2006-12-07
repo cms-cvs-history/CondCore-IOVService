@@ -3,8 +3,10 @@
 #include "IOVEditorImpl.h"
 #include "IOV.h"
 cond::IOVEditorImpl::IOVEditorImpl( cond::PoolStorageManager& pooldb,
-				    const std::string& token
-				  ):m_pooldb(pooldb),m_token(token),m_isActive(false){
+				    const std::string& token,
+				    cond::Time_t globalSince, 
+				    cond::Time_t globalTill
+				    ):m_pooldb(pooldb),m_token(token),m_globalSince(globalSince),m_globalTill(globalTill),m_isActive(false){
 }
 void cond::IOVEditorImpl::init(){
   //m_pooldb.startTransaction(cond::ReadOnly);
@@ -23,6 +25,7 @@ void cond::IOVEditorImpl::insert( cond::Time_t tillTime,
 				  const std::string& payloadToken
 				  ){
   if(!m_isActive) this->init();
+  //fix me: throw if beyond global range!!! 
   m_iov->iov.insert(std::make_pair<cond::Time_t, std::string>(tillTime, payloadToken));
   //m_pooldb.startTransaction(cond::ReadWriteCreate);
   if(m_token.empty()){
