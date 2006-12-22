@@ -9,10 +9,10 @@
 //#include "CondCore/DBCommon/interface/Ref.h"
 int main(){
   try{
-    cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
+    cond::DBSession* session=new cond::DBSession(true);
     session->sessionConfiguration().setMessageLevel(cond::Error);
-    session->open(true);
-    cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
+    session->open();
+    cond::PoolStorageManager pooldb("sqlite_file:test.db","file:mycatalog.xml",session);
     pooldb.connect();
     cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
@@ -31,7 +31,6 @@ int main(){
     pooldb.disconnect();
     session->close();
     delete editor;
-    //delete bomber;
     delete session;
   }catch(const cond::Exception& er){
     std::cout<<"error "<<er.what()<<std::endl;

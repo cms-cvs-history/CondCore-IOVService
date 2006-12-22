@@ -9,10 +9,12 @@
 #include <iostream>
 int main(){
   try{
-    cond::DBSession* session=new cond::DBSession("sqlite_file:test.db");
+    cond::DBSession* session=new cond::DBSession(true);
     session->sessionConfiguration().setMessageLevel(cond::Error);
-    session->open(true);
-    cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
+    session->open();
+    cond::PoolStorageManager pooldb("sqlite_file:test.db",
+				    "file:mycatalog.xml",
+				    session);
     cond::IOVService iovmanager(pooldb);
     pooldb.connect();
     cond::IOVEditor* editor=iovmanager.newIOVEditor();

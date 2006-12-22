@@ -11,10 +11,10 @@
 #include "testPayloadObj.h"
 int main(){
   try{
-    cond::DBSession* session=new cond::DBSession("sqlite_file:testqueryc.db");
+    cond::DBSession* session=new cond::DBSession;
     session->sessionConfiguration().setMessageLevel(cond::Error);
-    session->open(true);
-    cond::PoolStorageManager& pooldb=session->poolStorageManager("file:mycatalog.xml");
+    session->open();
+    cond::PoolStorageManager pooldb("sqlite_file:testqueryc.db","file:mycatalog.xml",session);
     pooldb.connect();
     std::cout<<1<<std::endl;
     testPayloadObj* myobj=new testPayloadObj;
@@ -22,20 +22,20 @@ int main(){
     myobj->data.push_back(1);
     myobj->data.push_back(10);
     std::cout<<3<<std::endl;
+    pooldb.startTransaction(false);
     cond::Ref<testPayloadObj> myref(pooldb,myobj);
     std::cout<<4<<std::endl;
-    pooldb.startTransaction(false);
     std::cout<<5<<std::endl;
     myref.markWrite("mypayloadcontainer");
     std::cout<<6<<std::endl;
     std::string token=myref.token();
     std::cout<<"payload token "<<token<<std::endl;
-    pooldb.commit();
     cond::IOVService iovmanager(pooldb);
     cond::IOVEditor* editor=iovmanager.newIOVEditor();
     editor->insert(20,token);
     std::string iovtok=editor->token();
     std::string cname=iovmanager.payloadContainerName(iovtok);
+    pooldb.commit();
     pooldb.disconnect();
     std::cout<<"Payload Container Name: "<<cname<<std::endl;
     delete editor;
