@@ -11,3 +11,7 @@
 <bin file=testIOVCopy.cc name=testIOVCopy>
   <lib name=testPayloadDict>	  	
 </bin>
+<bin file=testIOVDelete.cc name=testIOVDelete>
+  <lib name=testPayloadDict>	  	
+</bin>
+
