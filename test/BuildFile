@@ -3,15 +3,3 @@
 <use name=CondCore/DBCommon>
 <library name=testPayloadDict file=""></library>
 <use name=CondCore/IOVService>
-<bin file=testIOVEditor.cc name=testIOVEditor></bin>
-<bin file=testIOVIterator.cc name=testIOVIterator></bin>
-<bin file=testqueryPContainer.cc name=testqueryPContainer>
-  <lib name=testPayloadDict>	  
-</bin>
-<bin file=testIOVCopy.cc name=testIOVCopy>
-  <lib name=testPayloadDict>	  	
-</bin>
-<bin file=testIOVDelete.cc name=testIOVDelete>
-  <lib name=testPayloadDict>	  	
-</bin>
-
