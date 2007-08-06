@@ -12,4 +12,7 @@
 <bin file=testIOVDelete.cc name=testIOVDelete>
 <lib name=testPayloadDict>
 </bin>
+<bin file=testIOVIterator.cc name=testIOVIterator>
+<lib name=testPayloadDict>
+</bin>
 
