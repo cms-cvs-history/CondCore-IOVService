@@ -15,4 +15,7 @@
 <bin file=testIOVIterator.cc name=testIOVIterator>
 <lib name=testPayloadDict>
 </bin>
+<bin file=testIOVCopy.cc name=testIOVCopy>
+<lib name=testPayloadDict>
+</bin>
 
