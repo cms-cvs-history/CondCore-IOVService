@@ -9,6 +9,9 @@
 <bin file=testIOVEditor.cc name=testIOVEditor>
 <lib name=testPayloadDict>
 </bin>
+<bin file=testIOVReplaceInterval.cc name=testIOVReplaceInterval>
+<lib name=testPayloadDict>
+</bin>
 <bin file=testIOVDelete.cc name=testIOVDelete>
 <lib name=testPayloadDict>
 </bin>
