@@ -23,4 +23,8 @@
 </bin>
 <bin file=testIOV.cc name=testIOV>
 </bin>
+<use name=cppunit>
+<use name=boost>
+<bin file=migrateIOV_t.cpp>
+</bin>
 
