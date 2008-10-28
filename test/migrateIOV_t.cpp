@@ -3,7 +3,7 @@
 #define private public
 #include "CondFormats/Common/interface/IOVSequence.h"
 #include "CondCore/IOVService/src/IOV.h"
-#undefine private
+#undef private
 
 #include "CondCore/IOVService/interface/migrateIOV.h"
 
