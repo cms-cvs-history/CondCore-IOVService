@@ -7,12 +7,16 @@
 #include "CondCore/DBCommon/interface/TypedRef.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
+#include "FWCore/PluginManager/interface/PluginManager.h"
+#include "FWCore/PluginManager/interface/standard.h"
 #include "testPayloadObj.h"
 #include <iostream>
 int main(){
   std::string sourceConnect("sqlite_file:source.db");
   std::string destConnect("sqlite_file:dest.db");
   try{
+    edmplugin::PluginManager::Config config;
+    edmplugin::PluginManager::configure(edmplugin::standard::config());
     cond::DBSession* session=new cond::DBSession;
     session->configuration().setMessageLevel(cond::Error);
     session->configuration().setAuthenticationMethod(cond::XML);

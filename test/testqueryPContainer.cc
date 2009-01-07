@@ -5,9 +5,13 @@
 #include "CondCore/DBCommon/interface/TypedRef.h"
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
+#include "FWCore/PluginManager/interface/PluginManager.h"
+#include "FWCore/PluginManager/interface/standard.h"
 #include "testPayloadObj.h"
 int main(){
   try{
+    edmplugin::PluginManager::Config config;
+    edmplugin::PluginManager::configure(edmplugin::standard::config());
     cond::DBSession* session=new cond::DBSession;
     //session->configuration().setMessageLevel(cond::Error);
     //session->configuration().setAuthenticationMethod(cond::XML);

@@ -5,10 +5,13 @@
 #include "CondCore/IOVService/interface/IOVService.h"
 #include "CondCore/IOVService/interface/IOVEditor.h"
 #include "CondCore/IOVService/interface/IOVIterator.h"
-
+#include "FWCore/PluginManager/interface/PluginManager.h"
+#include "FWCore/PluginManager/interface/standard.h"
 #include <iostream>
 int main(){
   try{
+    edmplugin::PluginManager::Config config;
+    edmplugin::PluginManager::configure(edmplugin::standard::config());
     cond::DBSession* session=new cond::DBSession;
     session->open();
     cond::Connection myconnection("sqlite_file:test.db",0);  
