@@ -12,7 +12,7 @@ int main() {
   if (iov.add(30,"c")!=2) std::cerr << "error pos" << std::endl;
   iov.add(40,"d");
 
-  cond::IOV::Container const & v = iov.iov;
+  cond::IOV::Container const & v = iov.iovs();
 
   if (v.size()!=4) std::cerr << "error size" << std::endl;
   
