@@ -28,25 +28,24 @@ namespace {
    };
 
   Test::Test() :
-    m_iov(0,0),m_sequence(0,0,"")
+    m_iov(0,1),m_sequence(0,40,"")
   {
     m_iov.add(10,"a");
     m_iov.add(20,"b");
     m_iov.add(30,"c");
     m_iov.add(40,"d");
     //
-    const std::string invalidToken(" ");
-    m_sequence.add(10,"a",invalidToken);
-    m_sequence.add(20,"b",invalidToken);
-    m_sequence.add(30,"c",invalidToken);
-    m_sequence.add(40,"d",invalidToken);
+    m_sequence.add(1,"a");
+    m_sequence.add(11,"b");
+    m_sequence.add(21,"c");
+    m_sequence.add(31,"d");
   }
 
   void Test::migrate() {
     cond::IOVSequence * sequence = migrateIOV(m_iov);
     CPPUNIT_ASSERT((*sequence).m_timetype==m_sequence.m_timetype);
-    CPPUNIT_ASSERT((*sequence).m_firstsince==m_sequence.m_firstsince);
-    CPPUNIT_ASSERT((*sequence).m_freeUpdate==m_sequence.m_freeUpdate);
+    CPPUNIT_ASSERT((*sequence).m_lastTill==m_sequence.m_lastTill);
+    CPPUNIT_ASSERT((*sequence).m_notOrdered==m_sequence.m_notOrdered);
     CPPUNIT_ASSERT((*sequence).m_metadata==m_sequence.m_metadata);
     CPPUNIT_ASSERT((*sequence).iovs()==m_sequence.iovs());
     delete sequence;
