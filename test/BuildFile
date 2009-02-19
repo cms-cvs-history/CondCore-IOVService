@@ -12,8 +12,7 @@
 
 #<bin file=testIOVReplaceInterval.cc name=testIOVReplaceInterval>
 #<lib name=testPayloadDict>
-
-</bin>
+#</bin>
 <bin file=testIOVDelete.cc name=testIOVDelete>
 <lib name=testPayloadDict>
 </bin>
